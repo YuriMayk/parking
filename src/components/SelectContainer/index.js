@@ -1,35 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Container } from "./styles";
 
-
-let firstButtonStatus = "selected";
-let secondButtonStatus = "non-selected";
-
-function toSelectFirst() {
- if (firstButtonStatus !== "selected") {
-    firstButtonStatus = "selected";
-    secondButtonStatus = "non-selected";
-  }
-  console.log(firstButtonStatus, secondButtonStatus);
-}
-
-function toSelectSecond() {
-  if (secondButtonStatus !== "selected") {
-    firstButtonStatus = "non-selected";
-    secondButtonStatus = "selected";
-  }
-  console.log(firstButtonStatus, secondButtonStatus);
-}
-
 function SelectContainer() {
+  const [condition, setCondition] = useState([
+    "selected",
+    "non-selected",
+    "under-selected",
+    "under-non-selected",
+  ]);
+  let counterOne = 0;
+  let counterTwo = 1;
+  let counterThree = 2;
+  let counterfour = 3;
+
+  function toSelectFirst() {
+    if (condition[0] !== "selected") {
+      setCondition([
+        "selected",
+        "non-selected",
+        "under-selected",
+        "under-non-selected",
+      ]);
+      --counterOne;
+      ++counterTwo;
+      --counterThree;
+      ++counterfour;
+    }
+  }
+  function toSelectSecond() {
+    if (condition[1] !== "selected") {
+      setCondition([
+        "non-selected",
+        "selected",
+        "under-non-selected",
+        "under-selected",
+      ]);
+
+      ++counterOne;
+      --counterTwo;
+      ++counterThree;
+      --counterfour;
+    }
+  }
+
   return (
     <Container>
-      <button id={firstButtonStatus} onClick={toSelectFirst}>
+      <button id={condition[counterOne]} onClick={toSelectFirst}>
         Entrada
       </button>
-      <button id={secondButtonStatus} onClick={toSelectSecond}>Saída</button>
-      <button className="under"></button> <button className="under"></button>
+      <button id={condition[counterTwo]} onClick={toSelectSecond}>
+        Saída
+      </button>
+      <button id={condition[counterThree]} className="under"></button>
+      <button id={condition[counterfour]} className="under"></button>
     </Container>
   );
 }

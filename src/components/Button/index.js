@@ -2,9 +2,9 @@ import React from "react";
 
 import { Button as Btn } from "./styles";
 
-function Button ({children}) {
+function Button ({children, ...props}) {
 
-    return <Btn>{children}</Btn>
+    return <Btn {...props}>{children}</Btn>
 }
 
 export default Button

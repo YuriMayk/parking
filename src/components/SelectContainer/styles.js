@@ -10,23 +10,42 @@ export const Container = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   
-button {
-  background-color:#FFFFFF;
-  width: 172px;
-  height: 48px;
-  border-radius: 4px;
+  
 
-}
+  button {
+    width: 172px;
+    height: 48px;
+    transition-duration:300ms;
+  }
+  .under {
+    background-color: #4dd0e1;
+    width: 172px;
+    height: 3px;
+    
+  }
 
-.under{
-  background-color: #4DD0E1;
-  width: 172px;
-  height: 3px;
-}
+  #under-selected {
+    background-color: #4dd0e1;
+    width: 172px;
+    height: 3px;
+    
+  }
 
-#non-selected{
-background-color: #F2F2F2;
-}
+  #under-non-selected {
+    background-color: #f2f2f2;
+    width: 172px;
+    height: 3px;
+    
+  }
 
-
+  #selected {
+    color: #4dd0e1;
+    background-color: #ffffff;
+    
+  }
+  #non-selected {
+    color: #9b9b9b;
+    background-color: #f2f2f2;
+  
+  }
 `;
