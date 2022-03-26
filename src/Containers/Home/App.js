@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import axios from "axios";
 import TopContainer from "../../components/TopContainer";
 import CentralContainer from "../../components/CentralContainer";
 import Button from "../../components/Button";
@@ -30,22 +31,22 @@ function App() {
         console.log(newLicense);
       }
     }
-
-    return (
-      <div className="App">
-        <TopContainer></TopContainer>
-        <div>
-          <SelectContainer></SelectContainer>
-          <CentralContainer>
-            <TextBox ref={ref} type="text"></TextBox>
-            <Button onClick={addNewLicense}>
-              <p>CONFIRMAR ENTRADA</p>
-            </Button>
-          </CentralContainer>
-        </div>
-      </div>
-    );
   }
+
+  return (
+    <div className="App">
+      <TopContainer></TopContainer>
+      <div>
+        <SelectContainer></SelectContainer>
+        <CentralContainer>
+          <TextBox ref={ref} type="text"></TextBox>
+          <Button onClick={addNewLicense}>
+            <p>CONFIRMAR ENTRADA</p>
+          </Button>
+        </CentralContainer>
+      </div>
+    </div>
+  );
 }
 
 export default App;
