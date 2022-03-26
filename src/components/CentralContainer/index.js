@@ -1,5 +1,4 @@
 import React from "react";
-import TextBox from "../Input";
 
 import { Container } from "./styles";
 

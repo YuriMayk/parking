@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import axios from "axios";
 import TopContainer from "../../components/TopContainer";
 import CentralContainer from "../../components/CentralContainer";
@@ -11,25 +11,30 @@ function App() {
   const ref = React.createRef();
 
   function licenseVerifying(license) {
-    license.length < 7
-      ? alert("Por favor, insira o valor completo da placa!")
-      : console.log("valor inserido");
+    if (license.length < 7) {
+      alert("Por favor, insira o valor completo da placa!");
+      return false
+    } else {
+      console.log("Placa verificada.");
+      return true
+    }
   }
 
   function addNewLicense() {
     let license = ref.current.value;
     console.log(license);
     let check = licenseVerifying(license);
-    if (check) {
-      async function addNewUser() {
-        const newLicense = await axios.post(
+    if (check === true) {
+      async function newLicense() {
+        const response = await axios.post(
           "https://parking-lot-to-pfz.herokuapp.com/parking",
           {
             plate: license,
           }
         );
-        console.log(newLicense);
+        console.log(response);
       }
+      newLicense();
     }
   }
 
