@@ -1,22 +1,23 @@
-import React from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import api from "../../services/api";
 import TopContainer from "../../components/TopContainer";
 import CentralContainer from "../../components/CentralContainer";
 import Button from "../../components/Button";
 import TextBox from "../../components/Input";
 import SelectContainer from "../../components/SelectContainer";
 
+
 function App() {
-  //const [getLicense,setGetLicense] = useState([]);
+  const [getLicense, setGetLicense] = useState([]);
   const ref = React.createRef();
 
   function licenseVerifying(license) {
     if (license.length < 7) {
       alert("Por favor, insira o valor completo da placa!");
-      return false
+      return false;
     } else {
       console.log("Placa verificada.");
-      return true
+      return true;
     }
   }
 
@@ -24,20 +25,34 @@ function App() {
     let license = ref.current.value;
     console.log(license);
     let check = licenseVerifying(license);
+
+    /* useEffect(() => {
+      api.post("https://parking-lot-to-pfz.herokuapp.com/parking",{
+              plate: license,
+   })
+        .then((response) => setGetLicense(response.data))
+        .catch((err) => {
+          console.error("ops! ocorreu um erro" + err);
+        });
+    }, []); */
+
     if (check === true) {
       async function newLicense() {
-        const response = await axios.post(
-          "https://parking-lot-to-pfz.herokuapp.com/parking",
-          {
-            plate: license,
-          }
-        );
-        console.log(response);
+        const response = await api
+          .post("https://parking-lot-to-pfz.herokuapp.com/parking", {
+           'method': "POST",
+           'data': {plate: `${license}`},
+           'content-type': "application/json",
+           'url':"https://parking-lot-to-pfz.herokuapp.com/parking",
+          })
+          .then((response) => setGetLicense(response.data))
+          .catch((err) => {
+            console.log(err);
+          });
       }
       newLicense();
     }
   }
-
   return (
     <div className="App">
       <TopContainer></TopContainer>
