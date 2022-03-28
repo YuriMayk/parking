@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import fetchToCurl from "fetch-to-curl";
 import api from "../../services/api";
 import TopContainer from "../../components/TopContainer";
@@ -11,88 +12,58 @@ function App() {
   const [getLicense, setGetLicense] = useState([]);
   const ref = React.createRef();
 
-  function licenseVerifying(license) {
+  // A função abaixo é responsável por verificar se a placa é válida para rodar nesta aplicação.
+  function plateVerifier(license) {
     if (license.length < 7) {
       alert("Por favor, insira o valor completo da placa!");
       return false;
     } else {
-      console.log("Placa verificada.");
       return true;
     }
   }
 
   function addNewLicense() {
-    let license = ref.current.value;
-    console.log(license);
-    let check = licenseVerifying(license);
-    let araylicense = [
-      license[0],
-      license[1],
-      license[2],
-      license[3],
-      license[4],
-      license[5],
-      license[6],
-    ];
-    console.log(araylicense);
-    let newArayLicense =
-      araylicense[0] +
-      araylicense[1] +
-      araylicense[2] +
-      "-" +
-      araylicense[3] +
-      araylicense[4] +
-      araylicense[5] +
-      araylicense[6];
-    console.log(newArayLicense);
+    let license = ref.current.value; //Essa linha armazena o valor digitado pelo cliente, após apertar o botão.
 
-    const url = "https://parking-lot-to-pfz.herokuapp.com/parking";
-    const options = {
-      method: "Post",
-      data: {
-        plate: `${newArayLicense}`,
-      },
-      headers: { "content-type": "application/json" },
-      url: url,
-    };
+    let check = plateVerifier(license); //Essa linha rodará a função responsável por verificar se todos os caracteres da placa foram digitados.
 
-    
-    // O código abaixo envia registro de entrada realacionada a placa.
-    fetch(options)
+    function toFormatThePlate() {
+      let formatedLicense =
+        license[0] +
+        license[1] +
+        license[2] +
+        "-" +
+        license[3] +
+        license[4] +
+        license[5] +
+        license[6];
+      console.log(formatedLicense);
 
-    let urlhistory = url + `/${newArayLicense}`;
-    
-    /* "curl https://parking-lot-to-pfz.herokuapp.com/parking/AaA-4444" */
-    
-    //O código abaixo solicita o histórico relacionado a placa.
-    fetch(urlhistory);
+      const formatedPlate = '"' + formatedLicense + '"';
 
-    /* useEffect(() => {
-      api.post("https://parking-lot-to-pfz.herokuapp.com/parking",{
-              plate: license,
-   })
-        .then((response) => setGetLicense(response.data))
-        .catch((err) => {
-          console.error("ops! ocorreu um erro" + err);
+      return {
+        plate: formatedPlate,
+      };
+    }
+
+    let requestPlate = toFormatThePlate();
+    async function newLicense() {
+      const reservation = await axios
+        .post("https://parking-lot-to-pfz.herokuapp.com/parking", requestPlate)
+        .then((response) => {
+          console.log(
+            response.data
+          ); /* Esta linha será responsável por retornar a resposta da API. O padrão de resposta é :
+          entered_at: "ano-mês-diaThora:minuto:segundo.milésimo+horaDoFusoHorário:MinutosdoFusoHorário"
+          plate: "\"trêsPrimeirosDigitosDaPlaca-quatroÚltimosDigitosDaPlaca\""
+          reservation: "númeroDaReserva" */
+        })
+        .catch((error) => {
+          console.log(error);
         });
-    }, []); */
-    /* 
-    if (check === true) {
-      async function newLicense() {
-        const response = await api
-          .post("https://parking-lot-to-pfz.herokuapp.com/parking", {
-           'method': "POST",
-           'data': {plate: `${license}`},
-           'content-type': "application/json",
-           'url':"https://parking-lot-to-pfz.herokuapp.com/parking",
-          })
-          .then((response) => setGetLicense(response.data))
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-      newLicense();
-    }*/
+    }
+
+    newLicense();
   }
   return (
     <div className="App">
