@@ -20,8 +20,7 @@ function App(...props) {
   const refButtonPay = React.createRef();
   const refButtonOut = React.createRef();
   const refCentral = React.createRef();
-  console.log(refCentral)
-
+let keydown = ""
   function inputVerifier(event) {
     if (event.target.value.length > 6) {
       console.log("Digitou Todas os caracteres.");
@@ -33,6 +32,7 @@ function App(...props) {
           finishRegister: false,
         },
       ]);
+      
     } else {
       setChangeButton([
         {
@@ -56,7 +56,7 @@ function App(...props) {
   }
 
   function addNewLicense() {
-    let license = ref.current.value; //Essa linha armazena o valor digitado pelo cliente, após apertar o botão.
+    let license = ref.current.value.toUpperCase(); //Essa linha armazena o valor digitado pelo cliente, após apertar o botão.
 
     let check = plateVerifier(license); //Essa linha rodará a função responsável por verificar se todos os caracteres da placa foram digitados.
 
@@ -141,7 +141,7 @@ function App(...props) {
             visible={changeButton[0].visibilityCentralContainer}
             error={changeButton[0].error}
             finishRegister={changeButton[0].finishRegister}
-            type="text"
+            type="text"          
           ></TextBox>
           <Button
             ref={refButtonEnter}

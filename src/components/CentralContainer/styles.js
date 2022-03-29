@@ -1,4 +1,4 @@
-import styled,{css} from "styled-components";
+import styled, { css } from "styled-components";
 
 export const SelectContainer = styled.div`
   width: 344px;
@@ -23,9 +23,15 @@ export const ContainerError = styled.div`
   margin: 0 auto 16px auto;
   border-radius: 4px;
 
-  ${(props) => (props.error === false) ? css`
-  transition:4000ms;
-  display:none;` : css`display:flex`};
+  ${(props) =>
+    props.error === false
+      ? css`
+          transition: 4000ms;
+          display: none;
+        `
+      : css`
+          display: flex;
+        `};
 `;
 
 export const ErrorImage = styled.img`
@@ -38,20 +44,28 @@ export const ImageLoading = styled.img`
   width: 25%;
   transition: 3000ms;
   display: ${(props) => (props.visible ? "initial" : "none")};
-  ${(props) => props.finishRegister && `display:none`};
+  ${(props) =>
+    props.finishRegister &&
+    css`
+      display: none;
+    `};
   ${(props) =>
     props.finishRegister
-      ? `animation:none`
-      : ` animation:rotation 2s infinite linear;
-      
-      @keyframes rotation {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(359deg);
-    }
-  }`};
+      ? css`
+          animation: none;
+        `
+      : css`
+          animation: rotation 2s infinite linear;
+
+          @keyframes rotation {
+            from {
+              transform: rotate(0deg);
+            }
+            to {
+              transform: rotate(359deg);
+            }
+          }
+        `};
 `;
 export const ImageFinish = styled.img`
   margin: 10vh auto 0 auto;
@@ -82,6 +96,7 @@ export const Container = styled.div`
   flex-direction: column;
   transition: 300ms;
   padding-bottom: 40px;
+  ${(props)=> (props.selectedPage === "selected") && css`margin:13vh auto 20vh auto;`}
 
   p {
     font-weight: 400, Regular;
@@ -92,8 +107,8 @@ export const Container = styled.div`
     margin: 7vh 0 7px 16px;
   }
 
-  button#exit{
-    border: #A769B2;
+  button#exit {
+    border: #a769b2;
   }
 `;
 
@@ -114,11 +129,8 @@ export const P = styled.span`
   color: #ff1745ad;
 `;
 
-
-
-
 export const UnderButton = styled.button`
-transition-duration: 300ms;
+  transition-duration: 300ms;
   ${(props) =>
     props.id === "under-selected"
       ? `background-color: #4dd0e1;
@@ -154,6 +166,4 @@ export const Button = styled.button`
     background-color: #ffffff; `
       : ` color: #9b9b9b;
     background-color: #f2f2f2;`}
-
 `;
-

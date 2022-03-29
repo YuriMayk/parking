@@ -41,7 +41,7 @@ const CentralContainer = React.forwardRef((props, ref) => {
   let infoVisibility = props.children[1].props.visible;
   let error = props.children[0].props.error;
   let finishRegister = props.children[1].props.finishRegister;
-console.log(error)
+
   function toSelectFirst() {
     if (condition[0] !== "selected") {
       setCondition([
@@ -91,7 +91,7 @@ console.log(error)
   }
 
   return (
-    <Container selectedPage={condition[4]}>
+    <Container selectedPage={condition[1]}>
       <SelContainer id={condition[4]}>
         <Button id={condition[counterOne]} onClick={toSelectFirst}>
           Entrada
