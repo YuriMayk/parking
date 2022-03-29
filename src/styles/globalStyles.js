@@ -8,6 +8,7 @@ export const GlobalStyles = createGlobalStyle`
     outline:none;
     border: none;
     text-decoration: none;
+    font-family: 'Open Sans', sans-serif;
     
     body{
         background-color:#F2F2F2;

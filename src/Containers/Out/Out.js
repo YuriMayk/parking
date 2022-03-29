@@ -4,7 +4,6 @@ import TopContainer from "../../components/TopContainer";
 import CentralContainer from "../../components/CentralContainer";
 import Button from "../../components/Button";
 import TextBox from "../../components/Input";
-import SelectContainer from "../../components/SelectContainer";
 import { Link } from "./styles";
 
 function App(...props) {
@@ -122,7 +121,6 @@ function App(...props) {
     <div className="App">
       <TopContainer></TopContainer>
       <div>
-        <SelectContainer id={props.id}></SelectContainer>
         <CentralContainer
           selected={""}
           visible={changeButton[0].visibilityCentralContainer}
@@ -150,6 +148,7 @@ function App(...props) {
           </Button>
           <Button
             ref={refButton}
+            id={"exit"}
             plateTyped={changeButton[0].typedAllPlate}
             visible={changeButton[0].visibilityCentralContainer}
             finishRegister={changeButton[0].finishRegister}

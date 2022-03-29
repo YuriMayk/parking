@@ -4,7 +4,7 @@ import TopContainer from "../../components/TopContainer";
 import CentralContainer from "../../components/CentralContainer";
 import Button from "../../components/Button";
 import TextBox from "../../components/Input";
-import SelectContainer from "../../components/SelectContainer";
+import Link from "../../components/Link"
 
 function App(...props) {
   const [changeButton, setChangeButton] = useState([
@@ -16,7 +16,11 @@ function App(...props) {
     },
   ]);
   const ref = React.createRef();
-  const refButton = React.createRef();
+  const refButtonEnter = React.createRef();
+  const refButtonPay = React.createRef();
+  const refButtonOut = React.createRef();
+  const refCentral = React.createRef();
+  console.log(refCentral)
 
   function inputVerifier(event) {
     if (event.target.value.length > 6) {
@@ -115,15 +119,17 @@ function App(...props) {
         });
     }
 
+
+
     newLicense();
   }
   return (
     <div className="App">
       <TopContainer></TopContainer>
       <div>
-        <SelectContainer id={props.id}></SelectContainer>
         <CentralContainer
-          selected={""}
+        ref={refCentral}
+          selectedPage={props.selectedPage}
           visible={changeButton[0].visibilityCentralContainer}
           error={changeButton[0].error}
           finishRegister={changeButton[0].finishRegister}
@@ -138,16 +144,39 @@ function App(...props) {
             type="text"
           ></TextBox>
           <Button
-            ref={refButton}
+            ref={refButtonEnter}
             plateTyped={changeButton[0].typedAllPlate}
             visible={changeButton[0].visibilityCentralContainer}
             finishRegister={changeButton[0].finishRegister}
             error={changeButton[0].error}
+            typeButton={"Enter"}
             onClick={addNewLicense}
           >
             <span>CONFIRMAR ENTRADA</span>
           </Button>
-
+          <Button
+            ref={refButtonPay}
+            plateTyped={changeButton[0].typedAllPlate}
+            visible={changeButton[0].visibilityCentralContainer}
+            finishRegister={changeButton[0].finishRegister}
+            error={changeButton[0].error}
+            typeButton={"Pay"}
+            onClick={addNewLicense}
+          >
+            <span>PAGAMENTO</span>
+          </Button>
+          <Button
+            ref={refButtonOut}
+            plateTyped={changeButton[0].typedAllPlate}
+            visible={changeButton[0].visibilityCentralContainer}
+            finishRegister={changeButton[0].finishRegister}
+            error={changeButton[0].error}
+            typeButton={"Out"}
+            onClick={addNewLicense}
+          >
+            <span>SAÍDA</span>
+          </Button>
+          <Link value="VER HISTÓRICO"><span>VER HISTÓRICO</span></Link>
         </CentralContainer>
       </div>
     </div>
