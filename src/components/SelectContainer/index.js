@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
-import { Container } from "./styles";
+import { Container, Button, UnderButton } from "./styles";
 
-function SelectContainer() {
+const refSelector = React.createRef();
+
+function SelectContainer () {
   const [condition, setCondition] = useState([
     "selected",
     "non-selected",
     "under-selected",
     "under-non-selected",
+    "Enter",
   ]);
   let counterOne = 0;
   let counterTwo = 1;
@@ -21,6 +24,7 @@ function SelectContainer() {
         "non-selected",
         "under-selected",
         "under-non-selected",
+        "enter",
       ]);
       --counterOne;
       ++counterTwo;
@@ -35,6 +39,7 @@ function SelectContainer() {
         "selected",
         "under-non-selected",
         "under-selected",
+        "out"
       ]);
 
       ++counterOne;
@@ -45,15 +50,15 @@ function SelectContainer() {
   }
 
   return (
-    <Container>
-      <button id={condition[counterOne]} onClick={toSelectFirst}>
+    <Container ref={refSelector} id={condition[4]} >
+      <Button id={condition[counterOne]} onClick={toSelectFirst}>
         Entrada
-      </button>
-      <button id={condition[counterTwo]} onClick={toSelectSecond}>
+      </Button>
+      <Button id={condition[counterTwo]} onClick={toSelectSecond}>
         Saída
-      </button>
-      <button id={condition[counterThree]} className="under"></button>
-      <button id={condition[counterfour]} className="under"></button>
+      </Button>
+      <UnderButton id={condition[counterThree]} isUnder={true}></UnderButton>
+      <UnderButton id={condition[counterfour]} isUnder={true}></UnderButton>
     </Container>
   );
 }

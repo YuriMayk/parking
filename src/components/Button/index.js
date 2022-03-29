@@ -2,9 +2,12 @@ import React from "react";
 
 import { Button as Btn } from "./styles";
 
-function Button ({children, ...props}) {
 
-    return <Btn {...props}>{children}</Btn>
-}
+
+const Button = React.forwardRef((props,refButton)=> {
+    return <Btn ref={refButton} error={props.error} finishRegister={props.finishRegister} visible={props.visible} plateTyped={props.plateTyped} {...props}>{props.children}</Btn>
+}) 
+
+    
 
 export default Button

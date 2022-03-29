@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 export const Input = styled.input`
   background-color: #fffbe6;
-  color: #9b9b9b;
+  color:${props => props.plateTyped ? "#000000" : "#9b9b9b"};
+  color: ${(props)=> (props.plateTyped && props.error)?"#FF0068":"#9B9B9B"};
   width: 312px;
   height: 67px;
   border-radius: 4px;
@@ -12,5 +13,6 @@ export const Input = styled.input`
   text-align: Center;
   cursor: pointer;
   border: 1px solid #CCCCCC;
+  visibility: ${props => props.visible ? "hidden" : "visible"};
 
 `;
