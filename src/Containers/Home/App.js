@@ -4,8 +4,11 @@ import TopContainer from "../../components/TopContainer";
 import CentralContainer from "../../components/CentralContainer";
 import Button from "../../components/Button";
 import TextBox from "../../components/Input";
-import Link from "../../components/Link"
-
+import Link from "../../components/Link";
+import { ContainerConfim, ParagraphConfirm } from "./styles";
+import LoadImage from "../../assets/loading.png";
+import FinishImage from "../../assets/round-done-button.png";
+let invoke = "";
 function App(...props) {
   const [changeButton, setChangeButton] = useState([
     {
@@ -20,7 +23,7 @@ function App(...props) {
   const refButtonPay = React.createRef();
   const refButtonOut = React.createRef();
   const refCentral = React.createRef();
-let keydown = ""
+
   function inputVerifier(event) {
     if (event.target.value.length > 6) {
       console.log("Digitou Todas os caracteres.");
@@ -32,7 +35,6 @@ let keydown = ""
           finishRegister: false,
         },
       ]);
-      
     } else {
       setChangeButton([
         {
@@ -46,37 +48,59 @@ let keydown = ""
   }
 
   // A função abaixo é responsável por verificar se a placa é válida para rodar nesta aplicação.
-  function plateVerifier(license) {
-    if (license.length < 7) {
-      alert("Por favor, insira o valor completo da placa!");
-      return false;
-    } else {
-      return true;
+
+  function toFormatThePlateToEnter() {
+    function plateVerifier(license) {
+      if (license.length < 7) {
+        alert("Por favor, insira o valor completo da placa!");
+        return false;
+      } else {
+        return true;
+      }
     }
+    let license = ref.current.value.toUpperCase(); //Essa linha armazena o valor digitado pelo cliente, após apertar o botão.
+    let check = plateVerifier(license); //Essa linha rodará a função responsável por verificar se todos os caracteres da placa foram digitados.
+    let formatedLicense =
+      license[0] +
+      license[1] +
+      license[2] +
+      "-" +
+      license[3] +
+      license[4] +
+      license[5] +
+      license[6];
+
+    const formatedPlate = '"' + formatedLicense + '"';
+    return { plate: formatedPlate };
+  }
+
+  function toFormatThePlateToPayAndOut() {
+    function plateVerifier(license) {
+      if (license.length < 7) {
+        alert("Por favor, insira o valor completo da placa!");
+        return false;
+      } else {
+        return true;
+      }
+    }
+    let license = ref.current.value.toUpperCase(); //Essa linha armazena o valor digitado pelo cliente, após apertar o botão.
+    let check = plateVerifier(license); //Essa linha rodará a função responsável por verificar se todos os caracteres da placa foram digitados.
+    let formatedLicense =
+      license[0] +
+      license[1] +
+      license[2] +
+      "-" +
+      license[3] +
+      license[4] +
+      license[5] +
+      license[6];
+
+    return formatedLicense;
   }
 
   function addNewLicense() {
-    let license = ref.current.value.toUpperCase(); //Essa linha armazena o valor digitado pelo cliente, após apertar o botão.
+    let requestPlate = toFormatThePlateToEnter();
 
-    let check = plateVerifier(license); //Essa linha rodará a função responsável por verificar se todos os caracteres da placa foram digitados.
-
-    function toFormatThePlate() {
-      let formatedLicense =
-        license[0] +
-        license[1] +
-        license[2] +
-        "-" +
-        license[3] +
-        license[4] +
-        license[5] +
-        license[6];
-
-      const formatedPlate = '"' + formatedLicense + '"';
-
-      return { plate: formatedPlate };
-    }
-
-    let requestPlate = toFormatThePlate();
     async function newLicense() {
       setChangeButton([
         {
@@ -118,17 +142,169 @@ let keydown = ""
           console.log(error);
         });
     }
-
-
-
     newLicense();
   }
+  function ValidatePayment() {
+    let formatedPlate = toFormatThePlateToPayAndOut();
+
+    invoke = (
+      <ContainerConfim>
+        <ParagraphConfirm>
+          Confima o pagamento
+          <br /> da placa abaixo?
+        </ParagraphConfirm>
+        <ParagraphConfirm className={"Plate"}>{formatedPlate}</ParagraphConfirm>
+        <Button
+          onClick={ConfirmPayment}
+          ref={refButtonPay}
+          plateTyped={changeButton[0].typedAllPlate}
+          visible={changeButton[0].visibilityCentralContainer}
+          finishRegister={changeButton[0].finishRegister}
+          error={changeButton[0].error}
+          typeButton={"Pay"}
+        >
+          <span>CONFIRMAR</span>
+        </Button>
+      </ContainerConfim>
+    );
+
+    const url = "https://parking-lot-to-pfz.herokuapp.com/parking/";
+    let completeRequest = url + formatedPlate + "/pay";
+    console.log(completeRequest);
+    async function ConfirmPayment() {
+      invoke = (
+        <ContainerConfim isTemporary={true}>
+          <LoadImage />
+          <ParagraphConfirm>Confirmando...</ParagraphConfirm>
+        </ContainerConfim>
+      );
+
+      /*  setChangeButton([
+        {
+          typedAllPlate: false,
+          visibilityCentralContainer: true,
+          error: false,
+          finishRegister: false,
+        },
+      ]); */
+
+      const reservation = await axios
+        .post(completeRequest)
+        .then((response) => {
+          invoke = (
+            <ContainerConfim isTemporary={true}>
+              <FinishImage />
+              <ParagraphConfirm>PAGO!</ParagraphConfirm>
+            </ContainerConfim>
+          );
+          /*   setChangeButton([
+            {
+              typedAllPlate: false,
+              visibilityCentralContainer: true,
+              error: false,
+              finishRegister: true,
+            },
+          ]); */
+
+          console.log(response.data);
+        })
+        .catch((error) => {
+          invoke = (
+            <ContainerConfim isTemporary={true}>
+              <ParagraphConfirm>
+                Este veículo já obteve pagamento validado!
+              </ParagraphConfirm>
+            </ContainerConfim>
+          );
+          console.log(error);
+        });
+    }
+  }
+  function ValidateOut() {
+    let formatedPlate = toFormatThePlateToPayAndOut();
+
+    invoke = (
+      <ContainerConfim>
+        <ParagraphConfirm>
+          Confima o pagamento
+          <br /> da placa abaixo?
+        </ParagraphConfirm>
+        <ParagraphConfirm className={"Plate"}>{formatedPlate}</ParagraphConfirm>
+        <Button
+          onClick={ConfirmExit}
+          ref={refButtonPay}
+          plateTyped={changeButton[0].typedAllPlate}
+          visible={changeButton[0].visibilityCentralContainer}
+          finishRegister={changeButton[0].finishRegister}
+          error={changeButton[0].error}
+          typeButton={"Pay"}
+        >
+          <span>CONFIRMAR</span>
+        </Button>
+      </ContainerConfim>
+    );
+
+    const url = "https://parking-lot-to-pfz.herokuapp.com/parking/";
+    let completeRequest = url + formatedPlate + "/out";
+    console.log(completeRequest);
+    async function ConfirmExit() {
+      invoke = (
+        <ContainerConfim isTemporary={true}>
+          <LoadImage />
+          <ParagraphConfirm>Confirmando...</ParagraphConfirm>
+        </ContainerConfim>
+      );
+
+      /*  setChangeButton([
+        {
+          typedAllPlate: false,
+          visibilityCentralContainer: true,
+          error: false,
+          finishRegister: false,
+        },
+      ]); */
+
+      const reservation = await axios
+        .post(completeRequest)
+        .then((response) => {
+          invoke = (
+            <ContainerConfim isTemporary={true}>
+              <FinishImage />
+              <ParagraphConfirm>SAÍDA LIBERADA</ParagraphConfirm>
+            </ContainerConfim>
+          );
+          /*   setChangeButton([
+            {
+              typedAllPlate: false,
+              visibilityCentralContainer: true,
+              error: false,
+              finishRegister: true,
+            },
+          ]); */
+
+          console.log(response.data);
+        })
+        .catch((error) => {
+          invoke = (
+            <ContainerConfim isTemporary={true}>
+              <ParagraphConfirm>
+                Este Veículo não está dentro do estacionamento!
+              </ParagraphConfirm>
+            </ContainerConfim>
+          );
+          console.log(error);
+        });
+    }
+  }
+
   return (
     <div className="App">
       <TopContainer></TopContainer>
       <div>
+        {invoke}
         <CentralContainer
-        ref={refCentral}
+          isTemporary
+          ref={refCentral}
           selectedPage={props.selectedPage}
           visible={changeButton[0].visibilityCentralContainer}
           error={changeButton[0].error}
@@ -141,7 +317,8 @@ let keydown = ""
             visible={changeButton[0].visibilityCentralContainer}
             error={changeButton[0].error}
             finishRegister={changeButton[0].finishRegister}
-            type="text"          
+            pagechanged={false}
+            type="text"
           ></TextBox>
           <Button
             ref={refButtonEnter}
@@ -150,6 +327,7 @@ let keydown = ""
             finishRegister={changeButton[0].finishRegister}
             error={changeButton[0].error}
             typeButton={"Enter"}
+            changinPageSelect={false}
             onClick={addNewLicense}
           >
             <span>CONFIRMAR ENTRADA</span>
@@ -161,7 +339,7 @@ let keydown = ""
             finishRegister={changeButton[0].finishRegister}
             error={changeButton[0].error}
             typeButton={"Pay"}
-            onClick={addNewLicense}
+            onClick={ValidatePayment}
           >
             <span>PAGAMENTO</span>
           </Button>
@@ -172,11 +350,13 @@ let keydown = ""
             finishRegister={changeButton[0].finishRegister}
             error={changeButton[0].error}
             typeButton={"Out"}
-            onClick={addNewLicense}
+            onClick={ValidateOut}
           >
             <span>SAÍDA</span>
           </Button>
-          <Link value="VER HISTÓRICO"><span>VER HISTÓRICO</span></Link>
+          <Link value="VER HISTÓRICO">
+            <span>VER HISTÓRICO</span>
+          </Link>
         </CentralContainer>
       </div>
     </div>

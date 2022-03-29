@@ -14,7 +14,7 @@ const TextBox = React.forwardRef((props,ref) => {
     type={"text"} 
     placeholder={"abc-1234"} 
     maxLength={7} 
-    pattern={props.pattern} >{props.children}</Input>
+    pattern={props.pattern} pagechanged={props.pagechanged}>{props.children}</Input>
 })
 
 export default TextBox

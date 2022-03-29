@@ -17,6 +17,8 @@ import {
 } from "./styles";
 
 const CentralContainer = React.forwardRef((props, ref) => {
+  ++changedThePageNumber
+  let changedThePageNumber = 1
   const [condition, setCondition] = useState([
     "selected",
     "non-selected",
@@ -25,6 +27,8 @@ const CentralContainer = React.forwardRef((props, ref) => {
     "Enter",
     true,
     false,
+    changedThePageNumber,
+    
   ]);
   let counterOne = 0;
   let counterTwo = 1;
@@ -41,9 +45,11 @@ const CentralContainer = React.forwardRef((props, ref) => {
   let infoVisibility = props.children[1].props.visible;
   let error = props.children[0].props.error;
   let finishRegister = props.children[1].props.finishRegister;
-
+  let changedThePage = props.children[1].props.changinPageSelect;
   function toSelectFirst() {
     if (condition[0] !== "selected") {
+      ++changedThePageNumber
+      changedThePage = condition[5];
       setCondition([
         "selected",
         "non-selected",
@@ -52,7 +58,10 @@ const CentralContainer = React.forwardRef((props, ref) => {
         "Enter",
         true,
         false,
+        changedThePage,
+        changedThePageNumber
       ]);
+      finishRegister = condition[6];
       --counterOne;
       ++counterTwo;
       --counterThree;
@@ -60,7 +69,9 @@ const CentralContainer = React.forwardRef((props, ref) => {
     }
   }
   function toSelectSecond() {
+    changedThePage = condition[6];
     if (condition[1] !== "selected") {
+      changedThePage = true;
       setCondition([
         "non-selected",
         "selected",
@@ -69,12 +80,15 @@ const CentralContainer = React.forwardRef((props, ref) => {
         "out",
         false,
         true,
+        changedThePage,
       ]);
-
+      finishRegister = condition[5];
       ++counterOne;
       --counterTwo;
       ++counterThree;
       --counterfour;
+      childrenZero.selectedPage = condition[6]
+      console.log(childrenZero.selectedPage)
     }
   }
   if (condition[5] === true) {
@@ -89,7 +103,10 @@ const CentralContainer = React.forwardRef((props, ref) => {
   if (finishRegister === true) {
     paragraph = "REGISTRADO!";
   }
-
+if (condition[6] === true) {
+  paragraph ="Número da placa:"
+}
+  console.log(condition[6]);
   return (
     <Container selectedPage={condition[1]}>
       <SelContainer id={condition[4]}>
@@ -103,21 +120,29 @@ const CentralContainer = React.forwardRef((props, ref) => {
         <UnderButton id={condition[counterfour]} isUnder={true}></UnderButton>
       </SelContainer>
       <ImageFinish
-        pagechanged={condition[5]}
+        pagechanged={condition[6]}
         finishRegister={finishRegister}
         error={error}
         src={FinishImage}
       />
       <ImageLoading
-        pagechanged={condition[5]}
+        pagechanged={condition[6]}
         finishRegister={finishRegister}
         error={error}
         visible={infoVisibility}
         src={LoadImage}
         alt="Imagem de carregamento"
       />
-      <Paragraph visible={infoVisibility}>{paragraph}</Paragraph>
+      <Paragraph
+        pagechanged={condition[6]}
+        finishRegister={finishRegister}
+        error={error}
+        visible={infoVisibility}
+      >
+        {paragraph}
+      </Paragraph>
       {parents[0]}
+      
       <ContainerError
         visible={infoVisibility}
         pagechanged={condition[5]}
@@ -128,7 +153,6 @@ const CentralContainer = React.forwardRef((props, ref) => {
       </ContainerError>{" "}
       {parents[1]}
       {parents[2]}
-      
     </Container>
   );
 });

@@ -50,7 +50,7 @@ export const ImageLoading = styled.img`
       display: none;
     `};
   ${(props) =>
-    props.finishRegister
+    (props.finishRegister && (props.pagechanged !== true))
       ? css`
           animation: none;
         `
@@ -66,6 +66,12 @@ export const ImageLoading = styled.img`
             }
           }
         `};
+        ${(props) =>
+    props.pagechanged === true
+      ? css`
+          display: none;
+        `
+      : ``}
 `;
 export const ImageFinish = styled.img`
   margin: 10vh auto 0 auto;
@@ -73,18 +79,25 @@ export const ImageFinish = styled.img`
   transition: 1000ms;
   display: ${(props) => (props.finishRegister ? "initial" : "none")};
   ${(props) =>
+    props.pagechanged === true
+      ? css`
+          display: none;
+        `
+      : `display:visible`}
+
+  ${(props) =>
     props.finishRegister
       ? `animation:none`
       : ` animation:rotation 2s infinite linear;
-      
-      @keyframes rotation {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(359deg);
-    }
-  }`};
+    
+    @keyframes rotation {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(359deg);
+      }
+    }`};
 `;
 
 export const Container = styled.div`
@@ -96,7 +109,11 @@ export const Container = styled.div`
   flex-direction: column;
   transition: 300ms;
   padding-bottom: 40px;
-  ${(props)=> (props.selectedPage === "selected") && css`margin:13vh auto 20vh auto;`}
+  ${(props) =>
+    props.selectedPage === "selected" &&
+    css`
+      margin: 13vh auto 20vh auto;
+    `}
 
   p {
     font-weight: 400, Regular;
@@ -105,6 +122,7 @@ export const Container = styled.div`
     color: #9b9b9b;
     display: flex;
     margin: 7vh 0 7px 16px;
+    
   }
 
   button#exit {
@@ -121,6 +139,13 @@ export const Paragraph = styled.p`
   line-height: 100%;
   justify-content: center;
   color: #4A4A4A;`}
+
+${(props)=> (props.pagechanged)&& css`
+justify-content: flex-start;
+margin-bottom: 7px;
+`}
+
+
 `;
 export const P = styled.span`
   word-wrap: break-word;
@@ -166,4 +191,27 @@ export const Button = styled.button`
     background-color: #ffffff; `
       : ` color: #9b9b9b;
     background-color: #f2f2f2;`}
+`;
+
+export const Input = styled.input`
+  background-color: #fffbe6;
+  color:#9B9B9B;
+  width: 312px;
+  height: 67px;
+  border-radius: 4px;
+  margin: 0 auto 13px auto;
+  font-size: 24px; //fontstyle Regular
+  line-height: 100%;
+  text-align: Center;
+  cursor: pointer;
+  border: 1px solid #CCCCCC;
+  text-transform: uppercase;
+ // ${props => props.visible ? "visibility:hidden" : "visibility:hidden"};
+  ${(props)=> (props.pagechanged && (props.plateTyped === false))&& css` visibility:visible;`}
+  
+  ${props => ((props.plateTyped) && (props.error === false)) && css`color:#000000`};
+  
+    
+  ${(props)=> ((props.plateTyped) && (props.error === true))&& css`color:#FF0068`};
+
 `;

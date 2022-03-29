@@ -12,9 +12,9 @@ export const Input = styled.input`
   text-align: Center;
   cursor: pointer;
   border: 1px solid #CCCCCC;
-  visibility: ${props => props.visible ? "hidden" : "visible"};
   text-transform: uppercase;
-
+ // ${props => props.visible ? "visibility:hidden" : "visibility:hidden"};
+  ${(props)=> (props.pagechanged && (props.plateTyped === false))&& css` visibility:visible;`}
   
   ${props => ((props.plateTyped) && (props.error === false)) && css`color:#000000`};
   
@@ -22,3 +22,4 @@ export const Input = styled.input`
   ${(props)=> ((props.plateTyped) && (props.error === true))&& css`color:#FF0068`};
 
 `;
+
